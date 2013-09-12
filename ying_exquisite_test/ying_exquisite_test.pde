@@ -9,7 +9,8 @@ class Mover {
   float strokeWeight;
   int lifetimeMax;
   int lifetime;
-  
+  float jitter;
+
   public Mover() {
     //pick a random location
     location = new PVector(random(0, width), random(-100, height*0.7));
@@ -21,13 +22,16 @@ class Mover {
     velocity = new PVector(0, random(1,1.5));
     lifetimeMax = (int)random(200, 1000);
     lifetime = 0;
+
+    jitter = 0;
   }
   void draw() {
     //update
     lifetime += 1;
     location.add(velocity);
     rotation += rotationVelocity;
-    
+    rotationVelocity *= 0.99;
+
     //draw
     float a = 255;
     /*
@@ -46,7 +50,7 @@ class Mover {
     } else {
       translate(location.x + currentOffset*0.1, location.y);
     }
-    
+
     rotate(rotation);
     stroke(255, a);
     noFill();
@@ -80,8 +84,8 @@ class Tweener { //this was for tweening but no time : (
       complete = true;
       running = false;
     }
-    
-    
+
+
   }
 }
 */
@@ -92,26 +96,32 @@ color backgroundColor;
 
 void doSomething() {
   backgroundColor = color(random(0,255), random(0,255), random(0,255));
+
+  Iterator<Mover> it = movers.iterator();
+  while(it.hasNext()) {
+    Mover m = it.next();
+    m.rotationVelocity *= 10;
+  }
 }
 
 void changeSomething(float arg1, float arg2) {
   println("changed " +  arg1);
-  currentOffset = (arg1-0.5) * maxOffset;
+  float argSum = arg1 + arg2;
+  currentOffset = ((arg1-0.5) * maxOffset) + random(0 + argSum) * 30;
 }
 
 void keyPressed() {
-  doSomething();  
+  doSomething();
 }
 
 void mouseMoved() {
-  println("x " + mouseX + " width " + width); 
+  println("x " + mouseX + " width " + width);
   changeSomething((float)mouseX/(float)width, (float)mouseY/(float)height);
 }
 
 void setup() {
   size(700, 394);
   maxOffset = 100;
- 
 }
 
 void draw() {
@@ -130,7 +140,6 @@ void draw() {
     }
   }
 
-  
 }
 
 

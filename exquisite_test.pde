@@ -56,24 +56,42 @@ class Mover {
   }
 }
 
-class Tweener {
+/*
+class Tweener { //this was for tweening but no time : (
   float fromValue;
   float toValue;
+  float step;
   boolean running;
   boolean complete;
   public Tweener() {
     type = 0;
+    step = 0.05;
   }
   void step() {
-    fromValue
+    boolean ascending;
+    if (fromValue < toValue) {
+      ascending = true;
+      fromValue += step;
+    } else  {
+      ascending = false;
+      fromValue -= step;
+    }
+    if ((ascending && fromValue >= toValue) || (!ascending && fromValue <= toValue)) {
+      complete = true;
+      running = false;
+    }
+    
+    
   }
 }
+*/
 
 ArrayList<Mover> movers = new ArrayList<Mover>();
 float maxOffset, currentOffset;
+color backgroundColor;
 
 void doSomething() {
-    
+  backgroundColor = color(random(0,255), random(0,255), random(0,255));
 }
 
 void changeSomething(float arg1, float arg2) {
@@ -93,10 +111,11 @@ void mouseMoved() {
 void setup() {
   size(700, 394);
   maxOffset = 100;
+ 
 }
 
 void draw() {
-  background(0);
+  background(backgroundColor);
 
   if(random(0,1) > 0.9) {
     movers.add(new Mover());

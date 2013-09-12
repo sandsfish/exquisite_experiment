@@ -42,6 +42,10 @@ class Mover {
       println("dying");
     }
     */
+    
+    rotateX(random(0.1));
+    
+//    rotateZ(random(1));
     pushMatrix();
     if (size > 30) {
       translate(location.x + currentOffset, location.y);
@@ -52,10 +56,15 @@ class Mover {
     }
 
     rotate(rotation);
-    stroke(255, a);
-    noFill();
+//    stroke(255, a);
+    noStroke();
+    
+//    noFill();
     strokeWeight(strokeWeight);
+    fill(100, 100);
     rect(-size/2, -size/2, size, size);
+    rotateY(random(1));
+    box(size/2);
     popMatrix();
   }
 }
@@ -95,12 +104,12 @@ float maxOffset, currentOffset;
 color backgroundColor;
 
 void doSomething() {
-  backgroundColor = color(random(0,255), random(0,255), random(0,255));
+  backgroundColor = color(movers.get(0).rotation, movers.get(0).rotation, random(255));
 
   Iterator<Mover> it = movers.iterator();
   while(it.hasNext()) {
     Mover m = it.next();
-    m.rotationVelocity *= 10;
+    m.rotationVelocity *= 2;
   }
 }
 
@@ -108,6 +117,14 @@ void changeSomething(float arg1, float arg2) {
   println("changed " +  arg1);
   float argSum = arg1 + arg2;
   currentOffset = ((arg1-0.5) * maxOffset) + random(0 + argSum) * 30;
+  
+  Iterator<Mover> it = movers.iterator();
+  while(it.hasNext()) {
+    Mover m = it.next();
+    if(random(0, 1) > 0.6) {
+      m.size = random(5, 200);
+    }
+  }
 }
 
 void keyPressed() {
@@ -120,7 +137,7 @@ void mouseMoved() {
 }
 
 void setup() {
-  size(700, 394);
+  size(700, 394, OPENGL);
   maxOffset = 100;
 }
 
